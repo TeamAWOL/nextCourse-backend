@@ -12,30 +12,38 @@ class YelpController < ApplicationController
 
    def get_next_course
 
-     response = search
+     filter = input_params
+
+     type= params[:filter][:type]
+     location= params[:filter][:location]
+
+    #  actual yelp API call
+     response = search(type,location)
 
      puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
-     response["businesses"].each {|biz| puts biz["name"]}
+     # response["businesses"].each {|biz| puts biz["name"]}
 
      render json: response
 
    end
 
-   def search
+   def search(type,location)
 
      url = "#{API_HOST}#{SEARCH_PATH}"
-     params = {
-       term: "Taco",
-       location: "San Diego",
+     yelpParams = {
+       term: type,
+       location: location,
        limit: SEARCH_LIMIT
      }
 
-     response = HTTP.auth("Bearer #{API_KEY}").get(url, params: params)
-     puts "+++++++++++++++++++++++++++++++++++++++"
-     puts response
-     puts "+++++++++++++++++++++++++++++++++++++++"
+     response = HTTP.auth("Bearer #{API_KEY}").get(url, params: yelpParams)
 
      response.parse
+   end
+
+   private
+   def input_params
+     params.require(:filter).permit(:type,:location)
    end
 
 end
