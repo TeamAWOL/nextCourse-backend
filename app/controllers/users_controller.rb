@@ -3,7 +3,6 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
-    print(user)
 
     if user.save
       token = Knock::AuthToken.new(payload: { sub: user.id }).token
@@ -21,4 +20,5 @@ class UsersController < ApplicationController
   def user_params
     params.require(:auth).permit(:first_name,:last_name, :email, :password)
   end
+  
 end
