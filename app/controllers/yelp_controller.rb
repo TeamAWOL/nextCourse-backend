@@ -16,23 +16,26 @@ class YelpController < ApplicationController
 
      type= params[:filter][:type]
      location= params[:filter][:location]
+     price= params[:filter][:price]
 
     #  actual yelp API call
-     response = search(type,location)
+     response = search
 
-     puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
+     # puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
      # response["businesses"].each {|biz| puts biz["name"]}
 
      render json: response
 
    end
 
-   def search(type,location)
+   def search
 
      url = "#{API_HOST}#{SEARCH_PATH}"
      yelpParams = {
-       term: type,
-       location: location,
+       term: params[:filter][:type],
+       location: params[:filter][:location],
+       price: params[:filter][:price],
+       open_now: true,
        limit: SEARCH_LIMIT
      }
 

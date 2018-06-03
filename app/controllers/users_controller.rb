@@ -16,9 +16,34 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+      user = User.find(params[:mods][:user][:id])
+      user.update(update_params)
+
+      payload = {
+         updateUser: params
+      }
+      render json: payload, status:201
+  end
+
+  def destroy
+      puts(params[:id])
+      User.destroy(params[:id])
+
+      payload = {
+         deleteInfo: params[:id]
+      }
+      render json: payload, status: 201
+  end
+
   private
   def user_params
-    params.require(:auth).permit(:first_name,:last_name, :email, :password)
+    params.require(:auth).permit(:first_name,:last_name,:email,:zipcode,:dob,:password)
   end
-  
+
+  private
+  def update_params
+    params.require(:mods).require(:user).permit(:id,:first_name,:last_name,:email,:zipcode,:dob,:password)
+  end
+
 end
