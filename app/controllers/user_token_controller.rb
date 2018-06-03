@@ -3,7 +3,15 @@ before_action :authenticate
 
 
     def login
-      render json: auth_token, status: :created
+      user = User.find_by(email:auth_params[:email])
+
+      payload = {
+        user: user,
+        jwt:  auth_token
+      }
+
+      render json: payload, status: :created
+
     end
 
     private
@@ -18,7 +26,7 @@ before_action :authenticate
         if entity.respond_to? :to_token_payload
             Knock::AuthToken.new payload: entity.to_token_payload
         else
-            Knock::AuthToken.new payload: { sub: entity.id }
+            Knock::AuthToken.new(payload: { sub: entity.id }).token
         end
     end
 
