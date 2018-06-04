@@ -8,15 +8,15 @@ class YelpController < ApplicationController
    API_HOST = "https://api.yelp.com"
    SEARCH_PATH = "/v3/businesses/search"
    BUSINESS_PATH = "/v3/businesses/"
-   SEARCH_LIMIT = 5
+   SEARCH_LIMIT = 10
 
    def get_next_course
 
      filter = input_params
 
-     type= params[:filter][:type]
-     location= params[:filter][:location]
-     price= params[:filter][:price]
+     type = params[:filter][:type]
+     location = params[:filter][:location]
+     price = params[:filter][:price]
 
     #  actual yelp API call
      response = search
@@ -24,7 +24,9 @@ class YelpController < ApplicationController
      # puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
      # response["businesses"].each {|biz| puts biz["name"]}
 
-     render json: response
+     winNumber = rand(response["businesses"].length) - 1
+
+     render json: response["businesses"][winNumber]
 
    end
 
