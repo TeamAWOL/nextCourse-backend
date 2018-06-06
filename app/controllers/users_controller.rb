@@ -1,6 +1,14 @@
 class UsersController < ApplicationController
   before_action only: :show
 
+  def show
+      user = User.find(params[:id])
+      payload = {
+        user: user,
+      }
+      render json: payload, status: 201
+  end
+
   def create
     user = User.new(user_params)
 
