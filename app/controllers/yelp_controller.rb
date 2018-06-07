@@ -14,17 +14,40 @@ class YelpController < ApplicationController
 
      filter = input_params
 
-     type = params[:filter][:type]
-     location = params[:filter][:location]
-     price = params[:filter][:price]
+     userId = params[:filter][:userId]
 
-    #  actual yelp API call
+     type = params[:filter][:preference]
+     location = params[:filter][:location]
+     price = params[:filter][:price_range]
+
+     groupName= params[:filter][:group_name]
+     friendName= params[:filter][:friend_name]
+
+     #  actual yelp API call
      response = search
 
      # puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
      # response["businesses"].each {|biz| puts biz["name"]}
 
      winNumber = rand(response["businesses"].length) - 1
+
+     winning_restaurant = response["businesses"][winNumber]
+
+     winningRestaurant = winning_restaurant["name"]
+     winningUrl = winning_restaurant["url"]
+
+     user = User.find(userId  )
+
+     outingParams = { "winner": friendName,
+                      "winning_restaurant": winningRestaurant,
+                      "winning_group": groupName,
+                      "url": winningUrl}
+
+     # outingParams.permit(:winner,:winning_restaurant,:winning_group,:url)
+
+     outing = Outing.new(outingParams)
+
+     user.outings << outing
 
      render json: response["businesses"][winNumber]
 
@@ -34,7 +57,7 @@ class YelpController < ApplicationController
 
      url = "#{API_HOST}#{SEARCH_PATH}"
      yelpParams = {
-       term: params[:filter][:type],
+       term: params[:filter][:preference],
        location: params[:filter][:location],
        price: params[:filter][:price],
        open_now: true,
@@ -50,5 +73,7 @@ class YelpController < ApplicationController
    def input_params
      params.require(:filter).permit(:type,:location)
    end
+
+
 
 end
