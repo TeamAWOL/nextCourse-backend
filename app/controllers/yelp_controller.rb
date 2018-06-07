@@ -59,7 +59,7 @@ class YelpController < ApplicationController
      yelpParams = {
        term: params[:filter][:preference],
        location: params[:filter][:location],
-       price: params[:filter][:price],
+       price: params[:filter][:price_range],
        open_now: true,
        limit: SEARCH_LIMIT
      }
