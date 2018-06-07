@@ -10,14 +10,14 @@ class FriendsController < ApplicationController
   end
 
   def create
-      puts params
-      puts params[:mods][:groupId]
-      puts update_params
 
       group = Group.find(params[:mods][:groupId])
-      newFriend = Friend.new(update_params)
 
-      group.friends << newFriend
+      params[:mods][:friend].each { |friend|
+       f =  friend[1]
+       newFriend = Friend.new(update_set_params(f))
+       group.friends << newFriend
+      }
 
       payload = {
          addFriend: params
@@ -52,5 +52,11 @@ class FriendsController < ApplicationController
     params.require(:mods).require(:friend).permit(:id,:name,:email,:preference)
   end
 
+  private
+  def update_set_params (friend)
+    puts 'inside of update!!'
+    puts friend
+    friend.permit(:id,:name,:email,:preference)
+  end
 
 end
