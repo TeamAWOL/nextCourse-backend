@@ -15,7 +15,8 @@ class GroupsController < ApplicationController
       puts update_params
 
       user = User.find(params[:mods][:userId])
-      newGroup = Group.new(update_params)
+
+      newGroup = Group.new(crate_params)
 
       user.groups << newGroup
 
@@ -50,6 +51,11 @@ class GroupsController < ApplicationController
   private
   def update_params
     params.require(:mods).require(:group).permit(:id,:name,:location,:price_range)
+  end
+
+  private
+  def create_params
+    params.require(:mods).require(:group).require(:name,:location,:price_range)
   end
 
 
