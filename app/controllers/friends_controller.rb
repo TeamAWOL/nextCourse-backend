@@ -13,7 +13,7 @@ class FriendsController < ApplicationController
 
       group = Group.find(params[:mods][:groupId])
 
-      params[:mods][:friend].each { |friend|
+      params[:mods][:friends].each { |friend|
        f =  friend[1]
        newFriend = Friend.new(update_set_params(f))
        group.friends << newFriend
