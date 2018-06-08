@@ -12,16 +12,15 @@ class GroupsController < ApplicationController
   def create
       puts params
       puts params[:mods][:userId]
-      puts update_params
 
       user = User.find(params[:mods][:userId])
 
-      newGroup = Group.new(crate_params)
+      newGroup = Group.new(create_params)
 
       user.groups << newGroup
 
       payload = {
-         addGroup: params
+         addGroup: newGroup
       }
       render json: payload, status:201
 
@@ -55,7 +54,8 @@ class GroupsController < ApplicationController
 
   private
   def create_params
-    params.require(:mods).require(:group).require(:name,:location,:price_range)
+    params.require(:mods).require(:group).require(:name)
+    params.require(:mods).require(:group).permit(:name,:location,:price_range)
   end
 
 
