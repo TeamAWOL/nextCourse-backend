@@ -49,7 +49,7 @@ class OutingsController < ApplicationController
 
   private
   def update_params
-    params.require(:mods).require(:outing).permit(:id,:name,:winner,:winning_restaurant,:winning_group,:winning_time)
+    params.require(:mods).require(:outing).permit(:id,:winner,:winning_restaurant,:winning_group,:winning_time)
   end
 
 
