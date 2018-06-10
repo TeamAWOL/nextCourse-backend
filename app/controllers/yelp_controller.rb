@@ -15,16 +15,16 @@ class YelpController < ApplicationController
      filter = input_params
 
      userId = params[:filter][:userId]
+     groupId = params[:filter][:groupId]
 
-     type = params[:filter][:preference]
-     location = params[:filter][:location]
-     price = params[:filter][:price_range]
-
-     groupName= params[:filter][:group_name]
-     friendName= params[:filter][:friend_name]
+     # Step 1, find all friends associated with group_id
+     selectedGroup = Group.find(groupId)
+     friends = selectedGroup.friends
+     winFriendIndex = rand(friends.length) - 1
+     winningFriend = friends[winFriendIndex]
 
      #  actual yelp API call
-     response = search
+     response = search(selectedGroup,winningFriend)
 
      # puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
      # response["businesses"].each {|biz| puts biz["name"]}
@@ -38,9 +38,9 @@ class YelpController < ApplicationController
 
      user = User.find(userId  )
 
-     outingParams = { "winner": friendName,
+     outingParams = { "winner": winningFriend.name,
                       "winning_restaurant": winningRestaurant,
-                      "winning_group": groupName,
+                      "winning_group": selectedGroup.name,
                       "url": winningUrl}
 
      # outingParams.permit(:winner,:winning_restaurant,:winning_group,:url)
@@ -53,13 +53,13 @@ class YelpController < ApplicationController
 
    end
 
-   def search
+   def search(selectedGroup,winningFriend)
 
      url = "#{API_HOST}#{SEARCH_PATH}"
      yelpParams = {
-       term: params[:filter][:preference],
-       location: params[:filter][:location],
-       price: params[:filter][:price_range],
+       term: winningFriend.preference,
+       location: selectedGroup.location,
+       price: selectedGroup.price_range,
        open_now: true,
        limit: SEARCH_LIMIT
      }
@@ -71,7 +71,7 @@ class YelpController < ApplicationController
 
    private
    def input_params
-     params.require(:filter).permit(:type,:location)
+     params.require(:filter).permit(:userId,:groupId)
    end
 
 
