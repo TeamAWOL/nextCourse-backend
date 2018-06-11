@@ -35,7 +35,6 @@ class GroupsController < ApplicationController
   end
 
   def update
-
       g = Group.find(params[:mods][:group][:id])
       g.update(update_params)
 
@@ -47,7 +46,11 @@ class GroupsController < ApplicationController
 
   def destroy
       puts(params[:id])
+
+      Friend.where(group_id: params[:id]).destroy_all
+
       Group.destroy(params[:id])
+
 
       payload = {
          deleteInfo: params[:id]
