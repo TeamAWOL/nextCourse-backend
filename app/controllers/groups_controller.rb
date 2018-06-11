@@ -9,6 +9,14 @@ class GroupsController < ApplicationController
       render json: payload, status: 201
   end
 
+  def show
+      group = Group.find(params[:id])
+      payload = {
+        group: group,
+      }
+      render json: payload, status: 201
+  end
+
   def create
       puts params
       puts params[:mods][:userId]

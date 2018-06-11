@@ -26,6 +26,8 @@ class YelpController < ApplicationController
      #  actual yelp API call
      response = search(selectedGroup,winningFriend)
 
+     puts response
+
      # puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
      # response["businesses"].each {|biz| puts biz["name"]}
 
@@ -73,7 +75,5 @@ class YelpController < ApplicationController
    def input_params
      params.require(:filter).permit(:userId,:groupId)
    end
-
-
 
 end
