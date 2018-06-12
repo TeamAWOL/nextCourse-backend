@@ -26,6 +26,7 @@ class YelpController < ApplicationController
      #  actual yelp API call
      response = search(selectedGroup,winningFriend)
 
+     puts "))))))))))))))))"
      puts response
 
      # puts "Found #{response["total"]} businesses. Listing #{SEARCH_LIMIT}:"
@@ -65,6 +66,8 @@ class YelpController < ApplicationController
        open_now: true,
        limit: SEARCH_LIMIT
      }
+
+     puts yelpParams
 
      response = HTTP.auth("Bearer #{API_KEY}").get(url, params: yelpParams)
 
