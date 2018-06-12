@@ -64,8 +64,6 @@ class YelpController < ApplicationController
        limit: SEARCH_LIMIT
      }
 
-     puts yelpParams
-
      response = HTTP.auth("Bearer #{API_KEY}").get(url, params: yelpParams)
 
      response.parse
