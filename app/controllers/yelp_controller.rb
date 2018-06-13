@@ -66,6 +66,8 @@ class YelpController < ApplicationController
 
      response = HTTP.auth("Bearer #{API_KEY}").get(url, params: yelpParams)
 
+     puts response
+
      response.parse
    end
 
